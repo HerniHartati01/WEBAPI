@@ -13,7 +13,7 @@ namespace WEBAPI.Models
         public int Capacity { get; set; }
 
         //Cardinality
-        public ICollection<Booking> Bookings { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
 
     }
 }

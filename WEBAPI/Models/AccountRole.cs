@@ -12,7 +12,7 @@ namespace WEBAPI.Models
 
 
         //Cardinality
-        public Account Account { get; set; }
-        public Role Role { get; set; }
+        public Account? Account { get; set; }
+        public Role? Role { get; set; }
     }
 }
