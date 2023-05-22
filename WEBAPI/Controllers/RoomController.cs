@@ -9,9 +9,9 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class RoomController : ControllerBase
     {
-        private readonly IRoomRepository _roomRepository;
+        private readonly IRepositoryGeneric<Room> _roomRepository;
 
-        public RoomController(IRoomRepository roomRepository)
+        public RoomController(IRepositoryGeneric<Room> roomRepository)
         {
             _roomRepository = roomRepository;
         }

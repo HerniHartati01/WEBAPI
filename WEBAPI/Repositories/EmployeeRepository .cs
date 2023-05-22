@@ -4,7 +4,7 @@ using WEBAPI.Models;
 
 namespace WEBAPI.Repositories
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : IRepositoryGeneric<Employee>
     {
         private readonly BookingMangementDbContext _context;
         public EmployeeRepository(BookingMangementDbContext context)

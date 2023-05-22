@@ -2,7 +2,7 @@
 
 namespace WEBAPI.Contracts
 {
-    public interface IUniversityRepository
+    public interface IRepositoryGeneric
     {
         University Create(University university);
         bool Update(University university);

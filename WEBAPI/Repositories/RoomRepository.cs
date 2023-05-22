@@ -6,9 +6,10 @@ using WEBAPI.Models;
 
 namespace WEBAPI.Repositories
 {
-    public class RoomRepository : IRoomRepository
+    public class RoomRepository : IRepositoryGeneric<Room>
     {
         private readonly BookingMangementDbContext _context;
+        /*private readonly IRepositoryGeneric<Room> _roomRepository;*/
         public RoomRepository(BookingMangementDbContext context)
         {
             _context = context;
@@ -19,7 +20,7 @@ namespace WEBAPI.Repositories
             try
             {
                 _context.Set<Room>().Add(room);
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
                 return room;
             }
             catch
@@ -33,8 +34,9 @@ namespace WEBAPI.Repositories
         {
             try
             {
-                _context.Set<Room>().Update(room);
-                _context.SaveChanges();
+                
+                _context.Update(room);
+                _context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -55,7 +57,7 @@ namespace WEBAPI.Repositories
                 }
 
                 _context.Set<Room>().Remove(room);
-                _context.SaveChanges();
+                _context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -67,6 +69,7 @@ namespace WEBAPI.Repositories
         public IEnumerable<Room> GetAll()
         {
             return _context.Set<Room>().ToList();
+            
         }
 
 

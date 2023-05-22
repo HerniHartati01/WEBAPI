@@ -8,9 +8,9 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IRepositoryGeneric<Employee> _employeeRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IRepositoryGeneric<Employee> employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }

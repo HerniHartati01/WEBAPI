@@ -8,9 +8,9 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class BookingController : ControllerBase
     {
-        private readonly IBookingRepository _bookingRepository;
+        private readonly IRepositoryGeneric<Booking> _bookingRepository;
 
-        public BookingController(IBookingRepository bookingRepository)
+        public BookingController(IRepositoryGeneric<Booking> bookingRepository)
         {
             _bookingRepository = bookingRepository;
         }
