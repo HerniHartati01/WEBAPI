@@ -6,76 +6,13 @@ using WEBAPI.Models;
 
 namespace WEBAPI.Repositories
 {
-    public class RoomRepository : IRepositoryGeneric<Room>
+    public class RoomRepository : RepositoryGeneric<Room>, IRoomRepository
     {
-        private readonly BookingMangementDbContext _context;
-        /*private readonly IRepositoryGeneric<Room> _roomRepository;*/
-        public RoomRepository(BookingMangementDbContext context)
+        public RoomRepository(BookingMangementDbContext context) : base(context) { }
+
+        public IEnumerable<Room> GetByName(string name)
         {
-            _context = context;
-        }
-
-        public Room Create(Room room)
-        {
-            try
-            {
-                _context.Set<Room>().Add(room);
-                _context.SaveChangesAsync();
-                return room;
-            }
-            catch
-            {
-                return new Room();
-            }
-        }
-
-
-        public bool Update(Room room)
-        {
-            try
-            {
-                
-                _context.Update(room);
-                _context.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
-        public bool Delete(Guid guid)
-        {
-            try
-            {
-                var room = GetByGuid(guid);
-                if (room == null)
-                {
-                    return false;
-                }
-
-                _context.Set<Room>().Remove(room);
-                _context.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public IEnumerable<Room> GetAll()
-        {
-            return _context.Set<Room>().ToList();
-            
-        }
-
-
-        public Room? GetByGuid(Guid guid)
-        {
-            return _context.Set<Room>().Find(guid);
+            return _context.Set<Room>().Where(r => r.Name.Contains(name));
         }
     }
 }

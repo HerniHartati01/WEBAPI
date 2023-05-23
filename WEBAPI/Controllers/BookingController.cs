@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Bookings;
 
 namespace WEBAPI.Controllers
 {
@@ -8,11 +9,14 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class BookingController : ControllerBase
     {
-        private readonly IRepositoryGeneric<Booking> _bookingRepository;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IMapper<Booking, BookingVM> _bookingMapper;
 
-        public BookingController(IRepositoryGeneric<Booking> bookingRepository)
+        public BookingController(IBookingRepository bookingRepository,
+            IMapper<Booking, BookingVM> bookingMapper)
         {
             _bookingRepository = bookingRepository;
+            _bookingMapper = bookingMapper;
         }
 
         [HttpGet]
@@ -24,7 +28,8 @@ namespace WEBAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(booking);
+            var data = booking.Select(_bookingMapper.Map).ToList();
+            return Ok(data);
         }
 
         [HttpGet("{guid}")]
@@ -35,14 +40,15 @@ namespace WEBAPI.Controllers
             {
                 return NotFound();
             }
-
+            var data = _bookingMapper.Map(booking); 
             return Ok(booking);
         }
 
         [HttpPost]
-        public IActionResult Create(Booking booking)
+        public IActionResult Create(BookingVM bookingVM)
         {
-            var result = _bookingRepository.Create(booking);
+            var bookingConverted = _bookingMapper.Map(bookingVM);
+            var result = _bookingRepository.Create(bookingConverted);
             if (result is null)
             {
                 return BadRequest();
@@ -52,9 +58,10 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Booking booking)
+        public IActionResult Update(BookingVM bookingVM)
         {
-            var isUpdated = _bookingRepository.Update(booking);
+            var bookingConverted = _bookingMapper.Map(bookingVM);
+            var isUpdated = _bookingRepository.Update(bookingConverted);
             if (!isUpdated)
             {
                 return BadRequest();

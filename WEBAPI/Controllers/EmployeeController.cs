@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Employee;
 
 namespace WEBAPI.Controllers
 {
@@ -8,11 +9,14 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private readonly IRepositoryGeneric<Employee> _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IMapper<Employee, EmployeeVM> _employeeMapper;
 
-        public EmployeeController(IRepositoryGeneric<Employee> employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository,
+            IMapper<Employee, EmployeeVM> employeeMapper)
         {
             _employeeRepository = employeeRepository;
+            _employeeMapper = employeeMapper;
         }
 
         [HttpGet]
@@ -24,7 +28,8 @@ namespace WEBAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(employees);
+            var data = employees.Select(_employeeMapper.Map).ToList();
+            return Ok(data);
         }
 
         [HttpGet("{guid}")]
@@ -35,14 +40,15 @@ namespace WEBAPI.Controllers
             {
                 return NotFound();
             }
-
-            return Ok(employees);
+            var data = _employeeMapper.Map(employees);
+            return Ok(data);
         }
 
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeVM employeeVM)
         {
-            var result = _employeeRepository.Create(employee);
+            var employeeConverted = _employeeMapper.Map(employeeVM);
+            var result = _employeeRepository.Create(employeeConverted);
             if (result is null)
             {
                 return BadRequest();
@@ -52,9 +58,10 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Employee employee)
+        public IActionResult Update(EmployeeVM employeeVM)
         {
-            var isUpdated = _employeeRepository.Update(employee);
+            var employeeConverted = _employeeMapper.Map(employeeVM);
+            var isUpdated = _employeeRepository.Update(employeeConverted);
             if (!isUpdated)
             {
                 return BadRequest();

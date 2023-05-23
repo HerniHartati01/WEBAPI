@@ -2,12 +2,10 @@
 
 namespace WEBAPI.Contracts
 {
-    public interface IRepositoryGeneric
+    public interface IUniversityRepository : IRepositoryGeneric<University>
     {
-        University Create(University university);
-        bool Update(University university);
-        bool Delete(Guid guid);
-        IEnumerable<University> GetAll();
-        University? GetByGuid(Guid guid);
+        
+        IEnumerable<University> GetByName(string name);
+        
     }
 }

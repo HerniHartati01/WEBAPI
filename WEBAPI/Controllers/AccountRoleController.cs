@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.AccountRoles;
 
 namespace WEBAPI.Controllers
 {
@@ -8,11 +9,14 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class AccountRoleController : ControllerBase
     {
-        private readonly IRepositoryGeneric<AccountRole> _accountRoleRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IMapper<AccountRole, AccountRoleVM> _accountRoleVM;
 
-        public AccountRoleController(IRepositoryGeneric<AccountRole> accountRoleRepository)
+        public AccountRoleController(IAccountRoleRepository accountRoleRepository,
+            IMapper<AccountRole, AccountRoleVM> accountRoleVM)
         {
             _accountRoleRepository = accountRoleRepository;
+            _accountRoleVM = accountRoleVM;
         }
 
         [HttpGet]
@@ -24,7 +28,8 @@ namespace WEBAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(accountRoles);
+            var data = accountRoles.Select(_accountRoleVM.Map).ToList();
+            return Ok(data);
         }
 
         [HttpGet("{guid}")]
@@ -36,13 +41,15 @@ namespace WEBAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(accountRoles);
+            var data = _accountRoleVM.Map(accountRoles);
+            return Ok(data);
         }
 
         [HttpPost]
-        public IActionResult Create(AccountRole accountRoles)
+        public IActionResult Create(AccountRoleVM accountRoleVM)
         {
-            var result = _accountRoleRepository.Create(accountRoles);
+            var accountRoleConverted = _accountRoleVM.Map(accountRoleVM);
+            var result = _accountRoleRepository.Create(accountRoleConverted);
             if (result is null)
             {
                 return BadRequest();
@@ -52,9 +59,10 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(AccountRole accountRole)
+        public IActionResult Update(AccountRoleVM accountRoleVM)
         {
-            var isUpdated = _accountRoleRepository.Update(accountRole);
+            var accountRoleConverted = _accountRoleVM.Map(accountRoleVM);
+            var isUpdated = _accountRoleRepository.Update(accountRoleConverted);
             if (!isUpdated)
             {
                 return BadRequest();

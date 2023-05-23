@@ -3,6 +3,7 @@ using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
 using WEBAPI.Repositories;
+using WEBAPI.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +17,17 @@ var connectionString = builder.Configuration
 builder.Services.AddDbContext<BookingMangementDbContext>(options => options.UseSqlServer(connectionString));
 
 // Add Repository to the container.
-builder.Services.AddScoped<IRepositoryGeneric<University>, RepositoryGeneric<University>>();
-builder.Services.AddScoped<IRepositoryGeneric<Room>, RepositoryGeneric<Room>>();
-builder.Services.AddScoped<IRepositoryGeneric<Education>, RepositoryGeneric<Education>>();
-builder.Services.AddScoped<IRepositoryGeneric<Employee>, RepositoryGeneric<Employee>>();
-builder.Services.AddScoped<IRepositoryGeneric<Account>, RepositoryGeneric<Account>>();
-builder.Services.AddScoped<IRepositoryGeneric<AccountRole>,RepositoryGeneric<AccountRole>>();
-builder.Services.AddScoped<IRepositoryGeneric<Booking>, RepositoryGeneric<Booking>>();
-builder.Services.AddScoped<IRepositoryGeneric<Role>, RepositoryGeneric<Role>>();
+builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IEducationRepository, EducationRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountRoleRepository,AccountRoleRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
+// Add Mapper To Container
+builder.Services.AddSingleton(typeof(IMapper<,>), typeof(Mapper<,>));
 
 
 

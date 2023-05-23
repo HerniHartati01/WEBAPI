@@ -2,13 +2,8 @@
 
 namespace WEBAPI.Contracts
 {
-    public interface IRoomRepository
+    public interface IRoomRepository : IRepositoryGeneric<Room>
     {
-        Room Create(Room room);
-        bool Update(Room room);
-        bool Delete(Guid guid);
-        IEnumerable<Room> GetAll();
-        Room? GetByGuid(Guid guid);
-       
+        IEnumerable<Room> GetByName(string name);
     }
 }

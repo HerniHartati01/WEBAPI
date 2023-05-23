@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Accounts;
 
 namespace WEBAPI.Controllers
 {
@@ -8,11 +10,14 @@ namespace WEBAPI.Controllers
     [Route("api/[controller]")]
     public class AccountController : ControllerBase
     {
-        private readonly IRepositoryGeneric<Account> _accountRepository;
+        private readonly IAccountRepository _accountRepository;
+        private readonly IMapper<Account, AccountVM> _accountMapper;
 
-        public AccountController(IRepositoryGeneric<Account> accountRepository)
+        public AccountController(IAccountRepository accountRepository, 
+            IMapper<Account, AccountVM> accountMapper)
         {
             _accountRepository = accountRepository;
+            _accountMapper = accountMapper;
         }
 
         [HttpGet]
@@ -24,7 +29,8 @@ namespace WEBAPI.Controllers
                 return NotFound();
             }
 
-            return Ok(accounts);
+            var data = accounts.Select(_accountMapper.Map).ToList();
+            return Ok(data);
         }
 
         [HttpGet("{guid}")]
@@ -36,13 +42,15 @@ namespace WEBAPI.Controllers
                 return NotFound();
             }
 
+            var data = _accountMapper.Map(accounts);
             return Ok(accounts);
         }
 
         [HttpPost]
-        public IActionResult Create(Account account)
+        public IActionResult Create(AccountVM accountVM)
         {
-            var result = _accountRepository.Create(account);
+            var accountConverted = _accountMapper.Map(accountVM);
+            var result = _accountRepository.Create(accountConverted);
             if (result is null)
             {
                 return BadRequest();
@@ -52,9 +60,10 @@ namespace WEBAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Account account)
+        public IActionResult Update(AccountVM accountVM)
         {
-            var isUpdated = _accountRepository.Update(account);
+            var accountConverted = _accountMapper.Map(accountVM);
+            var isUpdated = _accountRepository.Update(accountConverted);
             if (!isUpdated)
             {
                 return BadRequest();
