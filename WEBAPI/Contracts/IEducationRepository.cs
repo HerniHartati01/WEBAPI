@@ -5,5 +5,7 @@ namespace WEBAPI.Contracts
     public interface IEducationRepository : IRepositoryGeneric<Education>
     {
         IEnumerable<Education> GetByUniversityId(Guid universityId);
+
+        Education GetByEmployeeId(Guid employeeId);
     }
 }

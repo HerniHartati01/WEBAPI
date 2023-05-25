@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Bookings;
 using WEBAPI.ViewModels.Educations;
+using WEBAPI.ViewModels.Others;
 
 namespace WEBAPI.Controllers
 {
@@ -25,11 +28,23 @@ namespace WEBAPI.Controllers
             var educations = _educationRepository.GetAll();
             if (!educations.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<EducationVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not found"
+
+                });
             }
 
             var data = educations.Select(_educationMapper.Map).ToList();
-            return Ok(data);
+            return Ok(new ResponseVM<List<EducationVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = data
+            });
         }
 
         [HttpGet("{guid}")]
@@ -38,7 +53,13 @@ namespace WEBAPI.Controllers
             var educations = _educationRepository.GetByGuid(guid);
             if (educations is null)
             {
-                return NotFound();
+                return NotFound(new ResponseVM<EducationVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not found"
+
+                });
             }
             var data = _educationMapper.Map(educations);
             return Ok(educations);
@@ -51,7 +72,12 @@ namespace WEBAPI.Controllers
             var result = _educationRepository.Create(educationConverted);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<EducationVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok(result);
@@ -64,7 +90,12 @@ namespace WEBAPI.Controllers
             var isUpdated = _educationRepository.Update(educationConverted);
             if (!isUpdated)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<EducationVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
@@ -76,7 +107,12 @@ namespace WEBAPI.Controllers
             var isDeleted = _educationRepository.Delete(guid);
             if (!isDeleted)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<EducationVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();

@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.Repositories;
+using WEBAPI.Utility;
+using WEBAPI.ViewModels.AccountRoles;
 using WEBAPI.ViewModels.Bookings;
+using WEBAPI.ViewModels.Others;
 
 namespace WEBAPI.Controllers
 {
@@ -11,12 +16,65 @@ namespace WEBAPI.Controllers
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IMapper<Booking, BookingVM> _bookingMapper;
-
+      
         public BookingController(IBookingRepository bookingRepository,
             IMapper<Booking, BookingVM> bookingMapper)
         {
             _bookingRepository = bookingRepository;
             _bookingMapper = bookingMapper;
+           
+        }
+
+        [HttpGet("BookingDetail")]
+        public IActionResult GetAllBookingDetail()
+        {
+            try
+            {
+
+                var results = _bookingRepository.GetAllBookingDetail();
+
+                return Ok( results);
+            }
+            catch
+            {
+                return Ok(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Ada Error",
+                });
+            }
+
+        }
+        [HttpGet("BookingDetail/{guid}")]
+        public IActionResult GetDetailByGuid(Guid guid)
+        {
+            try
+            {
+                var bookingDetailVM = _bookingRepository.GetBookingDetailByGuid(guid);
+
+                if (bookingDetailVM is null)
+                {
+                    return Ok(new ResponseVM<BookingVM>
+                    {
+                        Code = StatusCodes.Status200OK,
+                        Status = HttpStatusCode.OK.ToString(),
+                        Message = "Tidak ditemukan objek dengan Guid ini",
+                    });
+                }
+
+
+                return Ok(bookingDetailVM);
+            }
+            catch
+            {
+                return Ok(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Ada Error",
+                });
+            }
         }
 
         [HttpGet]
@@ -25,11 +83,23 @@ namespace WEBAPI.Controllers
             var booking = _bookingRepository.GetAll();
             if (!booking.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<BookingVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not found"
+
+                });
             }
 
             var data = booking.Select(_bookingMapper.Map).ToList();
-            return Ok(data);
+            return Ok(new ResponseVM<List<BookingVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = data
+            });
         }
 
         [HttpGet("{guid}")]
@@ -38,7 +108,13 @@ namespace WEBAPI.Controllers
             var booking = _bookingRepository.GetByGuid(guid);
             if (booking is null)
             {
-                return NotFound();
+                return NotFound(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not found"
+
+                });
             }
             var data = _bookingMapper.Map(booking); 
             return Ok(booking);
@@ -51,7 +127,12 @@ namespace WEBAPI.Controllers
             var result = _bookingRepository.Create(bookingConverted);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok(result);
@@ -64,7 +145,12 @@ namespace WEBAPI.Controllers
             var isUpdated = _bookingRepository.Update(bookingConverted);
             if (!isUpdated)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
@@ -76,10 +162,33 @@ namespace WEBAPI.Controllers
             var isDeleted = _bookingRepository.Delete(guid);
             if (!isDeleted)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
+        }
+
+
+        [HttpGet("bookinglength")]
+        public IActionResult GetDuration()
+        {
+            var bookingLengths = _bookingRepository.GetBookingDuration();
+            if (!bookingLengths.Any())
+            {
+                return NotFound(new ResponseVM<BookingVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            return Ok(bookingLengths);
         }
 
     }

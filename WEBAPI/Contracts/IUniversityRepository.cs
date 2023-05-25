@@ -6,6 +6,7 @@ namespace WEBAPI.Contracts
     {
         
         IEnumerable<University> GetByName(string name);
-        
+        University CreateWithValidate(University university);
+
     }
 }

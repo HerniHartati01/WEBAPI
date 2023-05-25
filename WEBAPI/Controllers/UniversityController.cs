@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
 using WEBAPI.ViewModels.Educations;
+using WEBAPI.ViewModels.Others;
+using WEBAPI.ViewModels.Rooms;
 using WEBAPI.ViewModels.Universities;
 
 namespace WEBAPI.Controllers
@@ -32,11 +35,22 @@ namespace WEBAPI.Controllers
             var universities = _universityRepository.GetAll();
             if (!universities.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<UniversityVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
 
             var data = universities.Select(_universityMapper.Map).ToList();
-            return Ok(data);
+            return Ok(new ResponseVM<List<UniversityVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = data
+            });
         }
 
         [HttpGet("{guid:guid}")]
@@ -45,11 +59,22 @@ namespace WEBAPI.Controllers
             var university = _universityRepository.GetByGuid(guid);
             if (university is null)
             {
-                return NotFound();
+                return NotFound(new ResponseVM<UniversityVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
 
             var data = _universityMapper.Map(university);
-            return Ok(data);
+            return Ok(new ResponseVM<UniversityVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = data
+            });
         }
 
         [HttpPost]
@@ -59,7 +84,12 @@ namespace WEBAPI.Controllers
             var result = _universityRepository.Create(universityConverted);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<UniversityVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
             
             return Ok(result);
@@ -72,7 +102,12 @@ namespace WEBAPI.Controllers
             var isUpdated = _universityRepository.Update(universityConverted);
             if (!isUpdated)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<UniversityVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             
@@ -85,7 +120,12 @@ namespace WEBAPI.Controllers
             var isDeleted = _universityRepository.Delete(guid);
             if (!isDeleted)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<UniversityVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
             
             return Ok();
@@ -97,7 +137,12 @@ namespace WEBAPI.Controllers
             var university = _universityRepository.GetByName(name);
             if (!university.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<UniversityVM>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = university.Select(_universityMapper.Map);
             return Ok(data);
@@ -109,7 +154,12 @@ namespace WEBAPI.Controllers
             var universities = _universityRepository.GetAll();
             if (!universities.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<UniversityVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
 
             var results = new List<UniversityEducationVM>();

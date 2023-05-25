@@ -1,12 +1,22 @@
 ﻿using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Employee;
 
 namespace WEBAPI.Repositories
 {
     public class EmployeeRepository : RepositoryGeneric<Employee>, IEmployeeRepository
     {
-        public EmployeeRepository(BookingMangementDbContext context) : base(context) { }
+        
+        private readonly IEducationRepository _educationRepository;
+        private readonly IUniversityRepository _universityRepository;
+        public EmployeeRepository(BookingMangementDbContext context,
+             IEducationRepository educationRepository,
+            IUniversityRepository universityRepository) : base(context) 
+        {
+            _educationRepository = educationRepository;
+            _universityRepository = universityRepository;
+        }
 
         public Guid? FindGuidByEmail(string email)
         {
@@ -25,7 +35,102 @@ namespace WEBAPI.Repositories
             }
         }
 
-        
+        public IEnumerable<Employee> GetByEmail(string email)
+        {
+            return _context.Set<Employee>().Where(e => e.Email == email);
+        }
+
+        public IEnumerable<MasterEmployeeVM> GetAllMasterEmployee()
+        {
+            var employees = GetAll();
+            var educations = _educationRepository.GetAll();
+            var universities = _universityRepository.GetAll();
+
+            var employeeEducations = new List<MasterEmployeeVM>();
+
+            foreach (var employee in employees)
+            {
+                var education = educations.FirstOrDefault(e => e.Guid == employee?.Guid);
+                var university = universities.FirstOrDefault(u => u.Guid == education?.UniversityGuid);
+
+                if (education != null && university != null)
+                {
+                    var employeeEducation = new MasterEmployeeVM
+                    {
+                        Guid = employee.Guid,
+                        NIK = employee.Nik,
+                        FullName = employee.FirstName + " " + employee.LastName,
+                        BirthDate = employee.BirthDate,
+                        Gender = employee.Gender.ToString(),
+                        HiringDate = employee.HiringDate,
+                        Email = employee.Email,
+                        PhoneNumber = employee.PhoneNumber,
+                        Major = education.Major,
+                        Degree = education.Degree,
+                        GPA = education.Gpa,
+                        UniversityName = university.Name
+                    };
+
+                    employeeEducations.Add(employeeEducation);
+                }
+            }
+
+            return employeeEducations;
+        }
+
+
+        MasterEmployeeVM? IEmployeeRepository.GetMasterEmployeeByGuid(Guid guid)
+        {
+            var employee = GetByGuid(guid);
+            var education = _educationRepository.GetByGuid(guid);
+            var university = _universityRepository.GetByGuid(education.UniversityGuid);
+
+            var data = new MasterEmployeeVM
+            {
+                Guid = employee.Guid,
+                NIK = employee.Nik,
+                FullName = employee.FirstName + " " + employee.LastName,
+                BirthDate = employee.BirthDate,
+                Gender = employee.Gender.ToString(),
+                HiringDate = employee.HiringDate,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Major = education.Major,
+                Degree = education.Degree,
+                GPA = education.Gpa,
+                UniversityName = university.Name
+            };
+
+            return data;
+        }
+
+        public int CreateWithValidate(Employee employee)
+        {
+            try
+            {
+                bool ExistsByEmail = _context.Employees.Any(e => e.Email == employee.Email);
+                if (ExistsByEmail)
+                {
+                    return 1;
+                }
+
+                bool ExistsByPhoneNumber = _context.Employees.Any(e => e.PhoneNumber == employee.PhoneNumber);
+                if (ExistsByPhoneNumber)
+                {
+                    return 2;
+                }
+
+                Create(employee);
+                return 3;
+
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+
     }
 }
 

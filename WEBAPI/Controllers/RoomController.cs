@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
 using WEBAPI.Repositories;
+using WEBAPI.ViewModels.Others;
+using WEBAPI.ViewModels.Roles;
 using WEBAPI.ViewModels.Rooms;
 using WEBAPI.ViewModels.Universities;
 
@@ -27,10 +30,21 @@ namespace WEBAPI.Controllers
             var rooms = _roomRepository.GetAll();
             if (!rooms.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<RoomVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = rooms.Select(_roomMapper.Map).ToList();
-            return Ok(data);
+            return Ok(new ResponseVM<List<RoomVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = data
+            });
         }
 
         [HttpGet("{guid:guid}")]
@@ -39,7 +53,12 @@ namespace WEBAPI.Controllers
             var rooms = _roomRepository.GetByGuid(guid);
             if (rooms is null)
             {
-                return NotFound();
+                return NotFound(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = _roomMapper.Map(rooms);
             return Ok(data);
@@ -52,7 +71,12 @@ namespace WEBAPI.Controllers
             var result = _roomRepository.Create(roomConverted);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok(result);
@@ -65,7 +89,12 @@ namespace WEBAPI.Controllers
             var isUpdated = _roomRepository.Update(roomConverted);
             if (!isUpdated)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
@@ -77,7 +106,12 @@ namespace WEBAPI.Controllers
             var isDeleted = _roomRepository.Delete(guid);
             if (!isDeleted)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
@@ -89,10 +123,66 @@ namespace WEBAPI.Controllers
             var rooms = _roomRepository.GetByName(name);
             if (!rooms.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = rooms.Select(_roomMapper.Map);
             return Ok(data);
+        }
+
+        [HttpGet("CurrentlyUsedRooms")]
+        public IActionResult GetCurrentlyUsedRooms()
+        {
+            var room = _roomRepository.GetCurrentlyUsedRooms();
+            if (room is null)
+            {
+                return NotFound(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            return Ok(room);
+        }
+
+        [HttpGet("CurrentlyUsedRoomsByDate")]
+        public IActionResult GetCurrentlyUsedRooms(DateTime dateTime)
+        {
+            var room = _roomRepository.GetByDate(dateTime);
+            if (room is null)
+            {
+                return NotFound(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            return Ok(room);
+        }
+
+        private string GetRoomStatus(Booking booking, DateTime dateTime)
+        {
+
+            if (booking.StartDate <= dateTime && booking.EndDate >= dateTime)
+            {
+                return "Occupied";
+            }
+            else if (booking.StartDate > dateTime)
+            {
+                return "Booked";
+            }
+            else
+            {
+                return "Available";
+            }
         }
 
     }

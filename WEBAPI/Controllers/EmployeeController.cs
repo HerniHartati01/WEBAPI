@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Accounts;
+using WEBAPI.ViewModels.Educations;
 using WEBAPI.ViewModels.Employee;
+using WEBAPI.ViewModels.Others;
+using WEBAPI.ViewModels.Universities;
 
 namespace WEBAPI.Controllers
 {
@@ -10,26 +15,87 @@ namespace WEBAPI.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEducationRepository _educationRepository;
+        private readonly IUniversityRepository _universityRepository;
         private readonly IMapper<Employee, EmployeeVM> _employeeMapper;
+        private readonly IMapper<Account, AccountVM> _accountMapper;
+        private readonly IMapper<Education, EducationVM> _educationMapper;
+        private readonly IMapper<University, UniversityVM> _universityMapper;
 
         public EmployeeController(IEmployeeRepository employeeRepository,
-            IMapper<Employee, EmployeeVM> employeeMapper)
+            IEducationRepository educationRepository,
+            IUniversityRepository universityRepository,
+            IMapper<Employee, EmployeeVM> employeeMapper, 
+            IAccountRepository accountRepository, 
+            IMapper<Education, EducationVM> educationMapper, 
+            IMapper<University, UniversityVM> universityMapper,
+             IMapper<Account, AccountVM> accountMapper)
         {
             _employeeRepository = employeeRepository;
+            _educationRepository = educationRepository;
+            _universityRepository = universityRepository;
             _employeeMapper = employeeMapper;
+            _educationMapper = educationMapper;
+            _universityMapper = universityMapper;
+            _accountMapper = accountMapper;
+        }
+
+        [HttpGet("GetAllMasterEmployee")]
+        public IActionResult GetAll()
+        {
+            var masterEmployees = _employeeRepository.GetAllMasterEmployee();
+            if (!masterEmployees.Any())
+            {
+                return NotFound(new ResponseVM<List<EmployeeVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            return Ok(masterEmployees);
+        }
+
+        [HttpGet("GetMasterEmployeeByGuid")]
+        public IActionResult GetMasterEmployeeByGuid(Guid guid)
+        {
+            var masterEmployees = _employeeRepository.GetMasterEmployeeByGuid(guid);
+            if (masterEmployees is null)
+            {
+                return NotFound(new ResponseVM<List<EmployeeVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            return Ok(masterEmployees);
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetEmploye()
         {
             var employees = _employeeRepository.GetAll();
             if (!employees.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<EmployeeVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
 
             var data = employees.Select(_employeeMapper.Map).ToList();
-            return Ok(data);
+            return Ok(new ResponseVM<List<EmployeeVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Not Found",
+                Data = data
+            });
         }
 
         [HttpGet("{guid}")]
@@ -38,7 +104,12 @@ namespace WEBAPI.Controllers
             var employees = _employeeRepository.GetByGuid(guid);
             if (employees is null)
             {
-                return NotFound();
+                return NotFound(new ResponseVM<EmployeeVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = _employeeMapper.Map(employees);
             return Ok(data);
@@ -51,7 +122,12 @@ namespace WEBAPI.Controllers
             var result = _employeeRepository.Create(employeeConverted);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<EmployeeVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok(result);
@@ -64,7 +140,12 @@ namespace WEBAPI.Controllers
             var isUpdated = _employeeRepository.Update(employeeConverted);
             if (!isUpdated)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<EmployeeVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
@@ -76,7 +157,12 @@ namespace WEBAPI.Controllers
             var isDeleted = _employeeRepository.Delete(guid);
             if (!isDeleted)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<EmployeeVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();

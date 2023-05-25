@@ -4,14 +4,42 @@ using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
 using WEBAPI.ViewModels.Accounts;
+using WEBAPI.ViewModels.Login;
 
 namespace WEBAPI.Repositories
 {
     public class AccountRepository : RepositoryGeneric<Account>, IAccountRepository
     {
 
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IUniversityRepository _universityRepository;
+        private readonly IEducationRepository _educationRepository;
+        public AccountRepository(BookingMangementDbContext context,
+            IUniversityRepository universityRepository,
+            IEmployeeRepository employeeRepository,
+            IEducationRepository educationRepository) : base(context)
+        {
+            _universityRepository = universityRepository;
+            _employeeRepository = employeeRepository;
+            _educationRepository = educationRepository;
+        }
 
-        public AccountRepository(BookingMangementDbContext context) : base(context) { }
+        public AccountEmpVM Login(LoginVM loginVM)
+        {
+            var account = GetAll();
+            var employee = _employeeRepository.GetAll();
+            var query = from emp in employee
+                        join acc in account
+                        on emp.Guid equals acc.Guid
+                        where emp.Email == loginVM.Email
+                        select new AccountEmpVM
+                        {
+                            Email = emp.Email,
+                            Password = acc.Password
+
+                        };
+            return query.FirstOrDefault();
+        }
 
         public int ChangePasswordById(Guid? employeeId, ChangePasswordVM changePasswordVM)
         {
@@ -71,6 +99,115 @@ namespace WEBAPI.Repositories
                 return false;
             }
         }
+
+        public int UpdateOTP(Guid? employeeId)
+        {
+            var account = new Account();
+            account = _context.Set<Account>().FirstOrDefault(a => a.Guid == employeeId);
+            //Generate OTP
+            Random rnd = new Random();
+            var getOtp = rnd.Next(100000, 999999);
+            account.Otp = getOtp;
+
+            //Add 5 minutes to expired time
+            account.ExpiredTime = DateTime.Now.AddMinutes(5);
+            account.IsUsed = false;
+            try
+            {
+                var check = Update(account);
+
+
+                if (!check)
+                {
+                    return 0;
+                }
+                return getOtp;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // coba
+
+        public int Register(RegisterVM registerVM)
+        {
+            try
+            {
+                var university = new University
+                {
+                    Code = registerVM.Code,
+                    Name = registerVM.Name
+
+                };
+                _universityRepository.CreateWithValidate(university);
+
+                var employee = new Employee
+                {
+                    Nik = GenerateNIK(),
+                    FirstName = registerVM.FirstName,
+                    LastName = registerVM.LastName,
+                    BirthDate = registerVM.BirthDate,
+                    Gender = registerVM.Gender,
+                    HiringDate = registerVM.HiringDate,
+                    Email = registerVM.Email,
+                    PhoneNumber = registerVM.PhoneNumber,
+                };
+                var result = _employeeRepository.CreateWithValidate(employee);
+
+                if (result != 3)
+                {
+                    return result;
+                }
+
+                var education = new Education
+                {
+                    Guid = employee.Guid,
+                    Major = registerVM.Major,
+                    Degree = registerVM.Degree,
+                    Gpa = registerVM.GPA,
+                    UniversityGuid = university.Guid
+                };
+                _educationRepository.Create(education);
+
+                var account = new Account
+                {
+                    Guid = employee.Guid,
+                    Password = registerVM.Password,
+                    IsDeleted = false,
+                    IsUsed = true,
+                    Otp = 0
+                };
+
+                Create(account);
+
+                return 3;
+
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
+
+        private string GenerateNIK()
+        {
+            var lastNik = _employeeRepository.GetAll().OrderByDescending(e => int.Parse(e.Nik)).FirstOrDefault();
+
+            if (lastNik != null)
+            {
+                int lastNikNumber;
+                if (int.TryParse(lastNik.Nik, out lastNikNumber))
+                {
+                    return (lastNikNumber + 1).ToString();
+                }
+            }
+
+            return "100000";
+        }
+
 
 
 

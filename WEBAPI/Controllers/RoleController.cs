@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.ViewModels.Employee;
+using WEBAPI.ViewModels.Others;
 using WEBAPI.ViewModels.Roles;
 using WEBAPI.ViewModels.Rooms;
 
@@ -26,10 +29,21 @@ namespace WEBAPI.Controllers
             var roles = _roleRepository.GetAll();
             if (!roles.Any())
             {
-                return NotFound();
+                return NotFound(new ResponseVM<List<RoleVM>>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = roles.Select(_roleMapper.Map).ToList();
-            return Ok(data);
+            return Ok(new ResponseVM<List<RoleVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = data
+            });
         }
 
         [HttpGet("{guid}")]
@@ -38,7 +52,12 @@ namespace WEBAPI.Controllers
             var roles = _roleRepository.GetByGuid(guid);
             if (roles is null)
             {
-                return NotFound();
+                return NotFound(new ResponseVM<RoleVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
             }
             var data = _roleMapper.Map(roles);
             return Ok(data);
@@ -51,7 +70,12 @@ namespace WEBAPI.Controllers
             var result = _roleRepository.Create(roleConverted);
             if (result is null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<RoleVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok(result);
@@ -64,7 +88,12 @@ namespace WEBAPI.Controllers
             var isUpdated = _roleRepository.Update(roleConverted);
             if (!isUpdated)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<RoleVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
@@ -76,7 +105,12 @@ namespace WEBAPI.Controllers
             var isDeleted = _roleRepository.Delete(guid);
             if (!isDeleted)
             {
-                return BadRequest();
+                return BadRequest(new ResponseVM<RoleVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Bad Request"
+                });
             }
 
             return Ok();
