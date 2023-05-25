@@ -1,8 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.Repositories;
+using WEBAPI.Utility;
 using WEBAPI.ViewModels.Accounts;
+using WEBAPI.ViewModels.Employee;
 
 namespace WEBAPI.Controllers
 {
@@ -12,12 +19,21 @@ namespace WEBAPI.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper<Account, AccountVM> _accountMapper;
-
-        public AccountController(IAccountRepository accountRepository, 
-            IMapper<Account, AccountVM> accountMapper)
+        private readonly IMapper<Employee, EmployeeVM> _emailMapper;
+        private readonly IMapper<Account, ChangePasswordVM> _changePasswordMapper;
+        private readonly IEmployeeRepository _employeeRepository;
+        public AccountController(IAccountRepository accountRepository,
+            IEmployeeRepository employeeRepository,
+            IMapper<Account, AccountVM> accountMapper, 
+            IMapper<Account, ChangePasswordVM> changePasswordMapper, 
+            IMapper<Employee, EmployeeVM> emailMapper)
         {
             _accountRepository = accountRepository;
+            _employeeRepository = employeeRepository;
             _accountMapper = accountMapper;
+            _changePasswordMapper = changePasswordMapper;
+            _emailMapper = emailMapper;
+
         }
 
         [HttpGet]
@@ -72,6 +88,7 @@ namespace WEBAPI.Controllers
             return Ok();
         }
 
+
         [HttpDelete("{guid}")]
         public IActionResult Delete(Guid guid)
         {
@@ -83,6 +100,38 @@ namespace WEBAPI.Controllers
 
             return Ok();
         }
+
+        [HttpPost("ChangePassword")]
+        public IActionResult ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            // Cek apakah email dan OTP valid
+            var account = _employeeRepository.FindGuidByEmail(changePasswordVM.Email);
+            var changePass = _accountRepository.ChangePasswordById(account, changePasswordVM);
+            switch (changePass)
+            {
+                case 0:
+                    return BadRequest("");
+                case 1:
+                    return Ok("Password has been changed successfully");
+                case 2:
+                    return BadRequest("Invalid OTP");
+                case 3:
+                    return BadRequest("OTP has already been used");
+                /*case 4:
+                    return BadRequest("OTP expired");*/
+                case 5:
+                    return BadRequest("Cek ...");
+
+            }
+            return null;
+
+        }
+
+       
+
+
+
+
 
     }
 }

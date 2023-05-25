@@ -5,7 +5,7 @@
         IEnumerable<TEntity> GetAll();
         TEntity? GetByGuid(Guid guid);
         TEntity? Create(TEntity entity);
-        bool Update(TEntity entity);
+        public bool Update(TEntity entity);
         bool Delete(Guid guid);
       
 

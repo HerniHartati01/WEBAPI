@@ -8,6 +8,8 @@ namespace WEBAPI.Repositories
     {
         public BookingRepository(BookingMangementDbContext context) : base(context) { }
 
+
+
         
     }
 }
