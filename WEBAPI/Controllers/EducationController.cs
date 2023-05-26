@@ -62,7 +62,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = _educationMapper.Map(educations);
-            return Ok(educations);
+            return Ok(new ResponseVM<EducationVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = data
+            });
         }
 
         [HttpPost]
@@ -80,7 +86,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<EducationVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPut]
@@ -98,7 +109,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<EducationVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -115,7 +131,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<EducationVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.Utility;
 using WEBAPI.ViewModels.Educations;
 using WEBAPI.ViewModels.Others;
 using WEBAPI.ViewModels.Rooms;
@@ -92,7 +93,12 @@ namespace WEBAPI.Controllers
                 });
             }
             
-            return Ok(result);
+            return Ok(new ResponseVM<UniversityVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPut]
@@ -111,7 +117,12 @@ namespace WEBAPI.Controllers
             }
 
             
-            return Ok();
+            return Ok(new ResponseVM<UniversityVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -128,7 +139,12 @@ namespace WEBAPI.Controllers
                 });
             }
             
-            return Ok();
+            return Ok(new ResponseVM<UniversityVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpGet("ByName/{name}")]
@@ -145,7 +161,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = university.Select(_universityMapper.Map);
-            return Ok(data);
+            return Ok(new ResponseVM<IEnumerable<UniversityVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = data
+            });
         }
 
         [HttpGet("WithEducation")]
@@ -178,7 +200,13 @@ namespace WEBAPI.Controllers
 
                 results.Add(result);
             }
-            return Ok(results);
+            return Ok(new ResponseVM<IEnumerable<UniversityEducationVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = results
+            });
         }
 
 

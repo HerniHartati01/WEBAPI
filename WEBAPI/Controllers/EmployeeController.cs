@@ -54,7 +54,13 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(masterEmployees);
+            return Ok(new ResponseVM<IEnumerable<MasterEmployeeVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = masterEmployees
+            });
         }
 
         [HttpGet("GetMasterEmployeeByGuid")]
@@ -71,7 +77,13 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(masterEmployees);
+            return Ok(new ResponseVM<MasterEmployeeVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = masterEmployees
+            });
         }
 
         [HttpGet]
@@ -112,7 +124,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = _employeeMapper.Map(employees);
-            return Ok(data);
+            return Ok(new ResponseVM<EmployeeVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = data
+            });
         }
 
         [HttpPost]
@@ -130,7 +148,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<EmployeeVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPut]
@@ -148,7 +171,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<EmployeeVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -165,7 +193,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<EmployeeVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
        

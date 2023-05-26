@@ -60,7 +60,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = _roleMapper.Map(roles);
-            return Ok(data);
+            return Ok(new ResponseVM<RoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Not Found",
+                Data = data
+            });
         }
 
         [HttpPost]
@@ -78,7 +84,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<RoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPut]
@@ -96,7 +107,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<RoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -113,7 +129,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<RoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
     }

@@ -13,6 +13,7 @@ using WEBAPI.ViewModels.Accounts;
 using WEBAPI.ViewModels.Employee;
 using WEBAPI.ViewModels.Login;
 using WEBAPI.ViewModels.Others;
+using WEBAPI.ViewModels.Rooms;
 using WEBAPI.ViewModels.Universities;
 
 namespace WEBAPI.Controllers
@@ -68,7 +69,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<LoginVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+            });
 
         }
 
@@ -182,7 +188,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<AccountVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess" 
+            });
         }
 
         [HttpPut]
@@ -200,7 +211,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<AccountVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
 
@@ -218,7 +234,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<AccountVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPost("ChangePassword")]
@@ -312,13 +333,14 @@ namespace WEBAPI.Controllers
                                .WithEmail(email)
                                .Send();
 
-                    return Ok(hasil);
+                    return Ok(new ResponseVM<AccountResetPasswordVM>
+                    {
+                        Code = StatusCodes.Status200OK,
+                        Status = HttpStatusCode.OK.ToString(),
+                        Message = "Succsess"
+                    });
 
             }
-
-
-
-
 
 
 

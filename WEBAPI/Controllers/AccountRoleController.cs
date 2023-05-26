@@ -86,7 +86,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<AccountRoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success"
+            });
         }
 
         [HttpPut]
@@ -104,7 +109,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<AccountRoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -121,7 +131,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<AccountRoleVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success"
+            });
         }
 
     }

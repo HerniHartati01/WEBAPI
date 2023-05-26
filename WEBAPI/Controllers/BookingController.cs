@@ -5,6 +5,7 @@ using WEBAPI.Models;
 using WEBAPI.Repositories;
 using WEBAPI.Utility;
 using WEBAPI.ViewModels.AccountRoles;
+using WEBAPI.ViewModels.Accounts;
 using WEBAPI.ViewModels.Bookings;
 using WEBAPI.ViewModels.Others;
 
@@ -117,7 +118,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = _bookingMapper.Map(booking); 
-            return Ok(booking);
+            return Ok(new ResponseVM<BookingVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = data
+            });
         }
 
         [HttpPost]
@@ -135,7 +142,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<BookingVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPut]
@@ -153,7 +165,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<BookingVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -170,7 +187,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<BookingVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
 
@@ -188,7 +210,13 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(bookingLengths);
+            return Ok(new ResponseVM<IEnumerable<BookingDurationVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = bookingLengths
+            });
         }
 
     }

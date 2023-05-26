@@ -3,6 +3,7 @@ using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
 using WEBAPI.Repositories;
+using WEBAPI.Utility;
 using WEBAPI.ViewModels.Others;
 using WEBAPI.ViewModels.Roles;
 using WEBAPI.ViewModels.Rooms;
@@ -61,7 +62,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = _roomMapper.Map(rooms);
-            return Ok(data);
+            return Ok(new ResponseVM<RoomVM>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Not Found",
+                    Data = data
+                });
         }
 
         [HttpPost]
@@ -79,7 +86,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(result);
+            return Ok(new ResponseVM<RoomVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpPut]
@@ -97,7 +109,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<RoomVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpDelete("{guid}")]
@@ -114,7 +131,12 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok();
+            return Ok(new ResponseVM<RoomVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess"
+            });
         }
 
         [HttpGet("ByName/{name}")]
@@ -131,7 +153,13 @@ namespace WEBAPI.Controllers
                 });
             }
             var data = rooms.Select(_roomMapper.Map);
-            return Ok(data);
+            return Ok(new ResponseVM<IEnumerable<RoomVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = data
+            });
         }
 
         [HttpGet("CurrentlyUsedRooms")]
@@ -148,7 +176,13 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(room);
+            return Ok(new ResponseVM<IEnumerable<RoomUsedVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Success",
+                Data = room
+            });
         }
 
         [HttpGet("CurrentlyUsedRoomsByDate")]
@@ -165,7 +199,13 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(room);
+            return Ok(new ResponseVM<IEnumerable<MasterRoomVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Succsess",
+                Data = room
+            });
         }
 
         private string GetRoomStatus(Booking booking, DateTime dateTime)
