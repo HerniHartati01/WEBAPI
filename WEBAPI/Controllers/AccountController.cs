@@ -20,18 +20,21 @@ namespace WEBAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController <Account, AccountVM>
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper<Account, AccountVM> _accountMapper;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmailService _emailService;
         public AccountController(IAccountRepository accountRepository,
             IEmployeeRepository employeeRepository,
-            IMapper<Account, AccountVM> accountMapper)
+            IMapper<Account, AccountVM> accountMapper, 
+            IEmailService emailService) : base (accountRepository, accountMapper)
         {
             _accountRepository = accountRepository;
             _employeeRepository = employeeRepository;
             _accountMapper = accountMapper;
+            _emailService = emailService;
            
 
         }
@@ -40,12 +43,7 @@ namespace WEBAPI.Controllers
 
         public IActionResult Login(LoginVM loginVM)
         {
-            /*var account = _accountRepository.Login(loginVM);
-            if (account is null)
-            {
-                return NotFound();
-            }
-            return Ok(account);*/
+           
 
             var account = _accountRepository.Login(loginVM);
 
@@ -55,17 +53,22 @@ namespace WEBAPI.Controllers
                 {
                     Code = StatusCodes.Status404NotFound,
                     Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Account not found"
+                    Message = "Account not found",
+                    Data = null
+                    
                 });
             }
 
-            if (account.Password != loginVM.Password)
+            var validatePass = Hashing.ValidatePassword(loginVM.Password, account.Password);
+            if (validatePass is false)
             {
                 return BadRequest(new ResponseVM<AccountVM>
                 {
                     Code = StatusCodes.Status400BadRequest,
                     Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Password is invalid"
+                    Message = "Password is invalid",
+                    Data = null
+
                 });
             }
 
@@ -125,122 +128,7 @@ namespace WEBAPI.Controllers
 
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var accounts = _accountRepository.GetAll();
-            if (!accounts.Any())
-            {
-                return NotFound(new ResponseVM<List<AccountVM>>
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Not found"
-                });
-            }
-
-            var data = accounts.Select(_accountMapper.Map).ToList();
-            return Ok(new ResponseVM<List<AccountVM>>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Success",
-                Data = data
-            });
-        }
-
-        [HttpGet("{guid}")]
-        public IActionResult GetByGuid(Guid guid)
-        {
-            var accounts = _accountRepository.GetByGuid(guid);
-            if (accounts is null)
-            {
-                return NotFound(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Account not found"
-                });
-            }
-
-            var data = _accountMapper.Map(accounts);
-            return Ok(new ResponseVM<AccountVM>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Success",
-                Data = data
-            });
-        }
-
-        [HttpPost]
-        public IActionResult Create(AccountVM accountVM)
-        {
-            var accountConverted = _accountMapper.Map(accountVM);
-            var result = _accountRepository.Create(accountConverted);
-            if (result is null)
-            {
-                return BadRequest(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Bad Request"
-                });
-            }
-
-            return Ok(new ResponseVM<AccountVM>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Succsess" 
-            });
-        }
-
-        [HttpPut]
-        public IActionResult Update(AccountVM accountVM)
-        {
-            var accountConverted = _accountMapper.Map(accountVM);
-            var isUpdated = _accountRepository.Update(accountConverted);
-            if (!isUpdated)
-            {
-                return BadRequest(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Bad Request"
-                });
-            }
-
-            return Ok(new ResponseVM<AccountVM>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Succsess"
-            });
-        }
-
-
-        [HttpDelete("{guid}")]
-        public IActionResult Delete(Guid guid)
-        {
-            var isDeleted = _accountRepository.Delete(guid);
-            if (!isDeleted)
-            {
-                return BadRequest(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Bad Request"
-                });
-            }
-
-            return Ok(new ResponseVM<AccountVM>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Succsess"
-            });
-        }
+       
 
         [HttpPost("ChangePassword")]
         public IActionResult ChangePassword(ChangePasswordVM changePasswordVM)
@@ -255,7 +143,8 @@ namespace WEBAPI.Controllers
                     {
                         Code = StatusCodes.Status400BadRequest,
                         Status = HttpStatusCode.BadRequest.ToString(),
-                        Message = "Bad Request"
+                        Message = "Bad Request",
+
                     });
                 case 1:
                     return Ok(new ResponseVM<AccountVM>
@@ -326,18 +215,20 @@ namespace WEBAPI.Controllers
                         OTP = isUpdated
                     };
 
-                    MailService mailService = new MailService();
-                    mailService.WithSubject("Kode OTP")
-                               .WithBody("OTP anda adalah: " + isUpdated.ToString() + ".\n" +
-                                         "Mohon kode OTP anda tidak diberikan kepada pihak lain" + ".\n" + "Terima kasih.")
-                               .WithEmail(email)
-                               .Send();
+
+                    // Send Email Using DI
+                    _emailService.SetEmail(email)
+                             .SetSubject("Forgot Password")
+                             .SetBody($"Your OTP is {isUpdated}")
+                             .SendEmailAsync();
+
 
                     return Ok(new ResponseVM<AccountResetPasswordVM>
                     {
                         Code = StatusCodes.Status200OK,
                         Status = HttpStatusCode.OK.ToString(),
-                        Message = "Succsess"
+                        Message = "Succsess",
+                        Data = hasil
                     });
 
             }

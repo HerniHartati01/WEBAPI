@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
+using WEBAPI.Utility;
 using WEBAPI.ViewModels.Accounts;
 using WEBAPI.ViewModels.Login;
 
@@ -171,10 +172,12 @@ namespace WEBAPI.Repositories
                 };
                 _educationRepository.Create(education);
 
+                // Proses Hasing untuk password
+                var hashingPass = Hashing.HashPassword(registerVM.Password);
                 var account = new Account
                 {
                     Guid = employee.Guid,
-                    Password = registerVM.Password,
+                    Password = hashingPass,
                     IsDeleted = false,
                     IsUsed = true,
                     Otp = 0

@@ -29,6 +29,12 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 // Add Mapper To Container
 builder.Services.AddSingleton(typeof(IMapper<,>), typeof(Mapper<,>));
 
+// Add Email Service To Container
+builder.Services.AddTransient<IEmailService, EmailService>(_ => new EmailService(
+    smtpServer: builder.Configuration["Email:SmtpServer"],
+    smtpPort: int.Parse(builder.Configuration["Email:SmtpPort"]),
+    fromEmailAddress: builder.Configuration["Email:FromEmailAddress"]
+    ));
 
 
 
