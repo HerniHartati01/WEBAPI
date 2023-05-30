@@ -1,4 +1,5 @@
-﻿using WEBAPI.Contexts;
+﻿using System.Linq.Expressions;
+using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
 using WEBAPI.ViewModels.Employee;
@@ -35,9 +36,9 @@ namespace WEBAPI.Repositories
             }
         }
 
-        public IEnumerable<Employee> GetByEmail(string email)
+        public Employee GetByEmail(string email)
         {
-            return _context.Set<Employee>().Where(e => e.Email == email);
+            return _context.Set<Employee>().FirstOrDefault(e => e.Email == email);
         }
 
         public IEnumerable<MasterEmployeeVM> GetAllMasterEmployee()
@@ -104,7 +105,7 @@ namespace WEBAPI.Repositories
             return data;
         }
 
-        public int CreateWithValidate(Employee employee)
+       /* public int CreateWithValidate(Employee employee)
         {
             try
             {
@@ -128,9 +129,18 @@ namespace WEBAPI.Repositories
             {
                 return 0;
             }
+        }*/
+
+        
+
+
+        public bool CheckEmailAndPhoneAndNik(string value)
+        {
+            return _context.Employees.Any(e => e.Email == value ||
+                                            e.PhoneNumber == value ||
+                                            e.Nik == value);
+
         }
-
-
     }
 }
 

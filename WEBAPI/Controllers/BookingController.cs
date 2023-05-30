@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
@@ -26,6 +27,7 @@ namespace WEBAPI.Controllers
            
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("BookingDetail")]
         public IActionResult GetAllBookingDetail()
         {
@@ -47,6 +49,7 @@ namespace WEBAPI.Controllers
             }
 
         }
+        
         [HttpGet("BookingDetail/{guid}")]
         public IActionResult GetDetailByGuid(Guid guid)
         {

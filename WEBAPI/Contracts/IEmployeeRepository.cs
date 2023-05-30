@@ -9,6 +9,9 @@ namespace WEBAPI.Contracts
         IEnumerable<MasterEmployeeVM> GetAllMasterEmployee();
 
         MasterEmployeeVM? GetMasterEmployeeByGuid(Guid guid);
-        int CreateWithValidate(Employee employee);
+        /*int CreateWithValidate(Employee employee);*/
+
+        bool CheckEmailAndPhoneAndNik (string value);
+        public Employee GetByEmail(string email);
     }
 }

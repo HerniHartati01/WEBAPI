@@ -21,6 +21,28 @@ namespace WEBAPI.Contexts
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Role>().HasData(new Role
+            {
+                Guid = Guid.Parse("e68b96e8-2279-4b4d-262e-08db60bf5fd4"),
+                Name = "User",
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now
+            },
+            new Role
+            {
+                Guid = Guid.Parse("e68b96e8-2279-5a5b-262e-08db60bf5fd4"),
+                Name = "Manager",
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now
+            },
+            new Role
+            {
+                Guid = Guid.Parse("e68b96e8-2279-6a6c-262e-08db60bf5fd4"),
+                Name = "Admin",
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now
+            });
+
             builder.Entity<Employee>().HasIndex(e => new
             {
                 e.Nik,

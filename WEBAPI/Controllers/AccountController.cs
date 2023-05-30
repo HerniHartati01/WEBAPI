@@ -1,9 +1,11 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Net;
+using System.Security.Claims;
 using WEBAPI.Contexts;
 using WEBAPI.Contracts;
 using WEBAPI.Models;
@@ -26,25 +28,25 @@ namespace WEBAPI.Controllers
         private readonly IMapper<Account, AccountVM> _accountMapper;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmailService _emailService;
+        private readonly ITokenService _tokenService;
         public AccountController(IAccountRepository accountRepository,
             IEmployeeRepository employeeRepository,
             IMapper<Account, AccountVM> accountMapper, 
-            IEmailService emailService) : base (accountRepository, accountMapper)
+            IEmailService emailService, ITokenService tokenService) : base (accountRepository, accountMapper)
         {
             _accountRepository = accountRepository;
             _employeeRepository = employeeRepository;
             _accountMapper = accountMapper;
             _emailService = emailService;
-           
-
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
-
+        [AllowAnonymous]
         public IActionResult Login(LoginVM loginVM)
         {
-           
 
+            var employee = _employeeRepository.GetByEmail(loginVM.Email);
             var account = _accountRepository.Login(loginVM);
 
             if (account == null)
@@ -72,17 +74,34 @@ namespace WEBAPI.Controllers
                 });
             }
 
-            return Ok(new ResponseVM<LoginVM>
+
+            var claims = new List<Claim>
+            {
+                new (ClaimTypes.NameIdentifier, employee.Nik),
+                new (ClaimTypes.Name, $"{employee.FirstName} {employee.LastName}"),
+                new (ClaimTypes.Email, employee.Email),
+            };
+
+            var roles = _accountRepository.GetRoles(employee.Guid);
+
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+            var token = _tokenService.GenerateToken(claims);
+
+            return Ok(new ResponseVM<string>
             {
                 Code = StatusCodes.Status200OK,
                 Status = HttpStatusCode.OK.ToString(),
-                Message = "Succsess",
+                Message = "Login Succsess",
+                Data = token
             });
 
         }
 
         [HttpPost("Register")]
-
+        [AllowAnonymous]
         public IActionResult Register(RegisterVM registerVM)
         {
 
@@ -131,6 +150,7 @@ namespace WEBAPI.Controllers
        
 
         [HttpPost("ChangePassword")]
+        [AllowAnonymous]
         public IActionResult ChangePassword(ChangePasswordVM changePasswordVM)
         {
             // Cek apakah email dan OTP valid
@@ -182,7 +202,8 @@ namespace WEBAPI.Controllers
 
         }
 
-        [HttpPost("ForgotPassword" + "{email}")]
+        [HttpPost("ForgotPassword/{email}")]
+        [AllowAnonymous]
         public IActionResult UpdateResetPass(String email)
         {
 
@@ -227,14 +248,32 @@ namespace WEBAPI.Controllers
                     {
                         Code = StatusCodes.Status200OK,
                         Status = HttpStatusCode.OK.ToString(),
-                        Message = "Succsess",
-                        Data = hasil
+                        Message = "Succsess"
                     });
 
             }
+        }
 
-
-
-        }      
+        [HttpPost("GetTokenPayload")]
+        public IActionResult GetByToken(string token)
+        {
+            var data = _tokenService.ExtractClaimsFromJwt(token);
+            if (data == null)
+            {
+                return NotFound(new ResponseVM<ClaimVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Token is invalid or expired"
+                });
+            }
+            return Ok(new ResponseVM<ClaimVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Claims has been retrived",
+                Data = data
+            });
+        }
     }
 }

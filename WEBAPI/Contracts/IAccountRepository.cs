@@ -10,5 +10,7 @@ namespace WEBAPI.Contracts
         AccountEmpVM Login(LoginVM loginVM);
         int UpdateOTP(Guid? employeeId);
         int Register(RegisterVM registerVM);
+
+        IEnumerable<string> GetRoles(Guid guid);
     }
 }

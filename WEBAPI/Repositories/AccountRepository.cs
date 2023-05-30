@@ -14,15 +14,21 @@ namespace WEBAPI.Repositories
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IUniversityRepository _universityRepository;
+        private readonly IAccountRoleRepository _accountRoleRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IEducationRepository _educationRepository;
         public AccountRepository(BookingMangementDbContext context,
             IUniversityRepository universityRepository,
             IEmployeeRepository employeeRepository,
+            IRoleRepository roleRepository,
+            IAccountRoleRepository accountRoleRepository,
             IEducationRepository educationRepository) : base(context)
         {
             _universityRepository = universityRepository;
             _employeeRepository = employeeRepository;
             _educationRepository = educationRepository;
+            _roleRepository = roleRepository;
+            _accountRoleRepository = accountRoleRepository;
         }
 
         public AccountEmpVM Login(LoginVM loginVM)
@@ -138,8 +144,8 @@ namespace WEBAPI.Repositories
             {
                 var university = new University
                 {
-                    Code = registerVM.Code,
-                    Name = registerVM.Name
+                    Code = registerVM.UniversityCode,
+                    Name = registerVM.UniversityName
 
                 };
                 _universityRepository.CreateWithValidate(university);
@@ -155,12 +161,13 @@ namespace WEBAPI.Repositories
                     Email = registerVM.Email,
                     PhoneNumber = registerVM.PhoneNumber,
                 };
-                var result = _employeeRepository.CreateWithValidate(employee);
 
-                if (result != 3)
+                var result = _employeeRepository.Create(employee);
+
+                /*if (result != 3)
                 {
                     return result;
-                }
+                }*/
 
                 var education = new Education
                 {
@@ -184,6 +191,14 @@ namespace WEBAPI.Repositories
                 };
 
                 Create(account);
+
+                var accountRole = new AccountRole
+                {
+                    RoleGuid = Guid.Parse("e68b96e8-2279-4b4d-262e-08db60bf5fd4"),
+                    AccountGuid = employee.Guid
+                };
+                _context.AccountRoles.Add(accountRole);
+                _context.SaveChanges();
 
                 return 3;
 
@@ -211,8 +226,21 @@ namespace WEBAPI.Repositories
             return "100000";
         }
 
+        public IEnumerable<string> GetRoles(Guid guid)
+        {
+            var accountrole = _accountRoleRepository.GetAll();
+            var roles = _roleRepository.GetAll();
 
+            var getAccount = GetByGuid(guid);
+            if (getAccount == null) return Enumerable.Empty<string>();
+            var GetRoles = from a in accountrole
+                           join r in roles on
+                           a.RoleGuid equals r.Guid
+                           where a.AccountGuid == guid
+                           select r.Name;
 
+            return GetRoles.ToList();
 
+        }
     }
 }

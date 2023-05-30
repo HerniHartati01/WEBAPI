@@ -264,6 +264,29 @@ namespace WEBAPI.Migrations
                     b.HasKey("Guid");
 
                     b.ToTable("tb_m_roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Guid = new Guid("e68b96e8-2279-4b4d-262e-08db60bf5fd4"),
+                            CreatedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4196),
+                            ModifiedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4212),
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Guid = new Guid("e68b96e8-2279-5a5b-262e-08db60bf5fd4"),
+                            CreatedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4217),
+                            ModifiedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4218),
+                            Name = "Manager"
+                        },
+                        new
+                        {
+                            Guid = new Guid("e68b96e8-2279-6a6c-262e-08db60bf5fd4"),
+                            CreatedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4221),
+                            ModifiedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4221),
+                            Name = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("WEBAPI.Models.Room", b =>
@@ -404,13 +427,11 @@ namespace WEBAPI.Migrations
 
             modelBuilder.Entity("WEBAPI.Models.Employee", b =>
                 {
-                    b.Navigation("Account")
-                        .IsRequired();
+                    b.Navigation("Account");
 
                     b.Navigation("Bookings");
 
-                    b.Navigation("Education")
-                        .IsRequired();
+                    b.Navigation("Education");
                 });
 
             modelBuilder.Entity("WEBAPI.Models.Role", b =>

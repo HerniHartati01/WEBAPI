@@ -1,4 +1,6 @@
-﻿namespace WEBAPI.ViewModels.Employee
+﻿using WEBAPI.Utility;
+
+namespace WEBAPI.ViewModels.Employee
 {
     public class EmployeeBookingVM
     {

@@ -1,7 +1,10 @@
-﻿namespace WEBAPI.ViewModels.Accounts
+﻿using WEBAPI.Utility;
+
+namespace WEBAPI.ViewModels.Accounts
 {
     public class AccountEmployeVM
     {
+        
         public string Password { get; set; }
         public bool IsDeleted { get; set; }
         public int OTP { get; set; }

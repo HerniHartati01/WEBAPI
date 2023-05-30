@@ -1,4 +1,5 @@
-﻿using WEBAPI.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using WEBAPI.Models;
 
 namespace WEBAPI.ViewModels.Educations
 {
@@ -7,6 +8,7 @@ namespace WEBAPI.ViewModels.Educations
        public Guid? Guid { get; set; }
         public string Major { get; set; }
         public string Degree { get; set; }
+        [Range(0,4, ErrorMessage = "Input a Valid number")]
         public float Gpa { get; set; }
         public Guid UniversityGuid { get; set; }
 
