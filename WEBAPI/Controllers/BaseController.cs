@@ -10,7 +10,7 @@ namespace WEBAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    /*[Authorize]*/
     public class BaseController<TModel, TViewModel> : ControllerBase
     {
         private readonly IRepositoryGeneric<TModel> _repository;
