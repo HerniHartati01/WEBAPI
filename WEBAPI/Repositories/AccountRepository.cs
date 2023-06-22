@@ -76,7 +76,8 @@ namespace WEBAPI.Repositories
             }
 
             // Update password
-            account.Password = changePasswordVM.NewPassword;
+            var hashingPass = Hashing.HashPassword(changePasswordVM.NewPassword);
+            account.Password = hashingPass;
             account.IsUsed = true;
             try
             {
@@ -195,7 +196,10 @@ namespace WEBAPI.Repositories
                 var accountRole = new AccountRole
                 {
                     RoleGuid = Guid.Parse("e68b96e8-2279-4b4d-262e-08db60bf5fd4"),
-                    AccountGuid = employee.Guid
+                    AccountGuid = employee.Guid,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+
                 };
                 _context.AccountRoles.Add(accountRole);
                 _context.SaveChanges();

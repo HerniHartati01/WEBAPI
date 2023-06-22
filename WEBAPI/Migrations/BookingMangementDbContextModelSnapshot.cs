@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WEBAPI.Contexts;
 
+
 #nullable disable
 
 namespace WEBAPI.Migrations
@@ -269,22 +270,22 @@ namespace WEBAPI.Migrations
                         new
                         {
                             Guid = new Guid("e68b96e8-2279-4b4d-262e-08db60bf5fd4"),
-                            CreatedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4196),
-                            ModifiedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4212),
+                            CreatedDate = new DateTime(2023, 6, 3, 20, 2, 9, 997, DateTimeKind.Local).AddTicks(925),
+                            ModifiedDate = new DateTime(2023, 6, 3, 20, 2, 9, 997, DateTimeKind.Local).AddTicks(936),
                             Name = "User"
                         },
                         new
                         {
                             Guid = new Guid("e68b96e8-2279-5a5b-262e-08db60bf5fd4"),
-                            CreatedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4217),
-                            ModifiedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4218),
+                            CreatedDate = new DateTime(2023, 6, 3, 20, 2, 9, 997, DateTimeKind.Local).AddTicks(939),
+                            ModifiedDate = new DateTime(2023, 6, 3, 20, 2, 9, 997, DateTimeKind.Local).AddTicks(940),
                             Name = "Manager"
                         },
                         new
                         {
                             Guid = new Guid("e68b96e8-2279-6a6c-262e-08db60bf5fd4"),
-                            CreatedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4221),
-                            ModifiedDate = new DateTime(2023, 5, 30, 11, 16, 56, 801, DateTimeKind.Local).AddTicks(4221),
+                            CreatedDate = new DateTime(2023, 6, 3, 20, 2, 9, 997, DateTimeKind.Local).AddTicks(942),
+                            ModifiedDate = new DateTime(2023, 6, 3, 20, 2, 9, 997, DateTimeKind.Local).AddTicks(943),
                             Name = "Admin"
                         });
                 });

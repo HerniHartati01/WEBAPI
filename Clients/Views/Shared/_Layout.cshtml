@@ -1,0 +1,643 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Client</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <link href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+   @* <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true" />*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+
+</head>
+<body>
+    <header >
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Client</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="University" asp-action="Index">University</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="Index">Employee</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Account</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-dark" href="/Logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid py-5" id="cfluid2">
+        @*<div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-center">Grid System <a style="color: #BDD5B1;">Gallery.</a></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 offset-2 text-end">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, laboriosam earum.
+                    Voluptatibus inventore at totam fugiat, natus asperiores temporibus a ipsa nulla,
+                    cupiditate explicabo reprehenderit numquam sunt vero enim quae.
+                </div>
+                <div class="col-4 offset-1">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Facere repellendus voluptate fugit excepturi vel aspernatur eveniet! V
+                    oluptatum voluptatibus possimus consectetur libero doloremque nemo quaerat
+                    excepturi architecto, perspiciatis facilis, aliquam quod.
+                </div>
+            </div>
+            <br>
+            <br>
+        </div>
+
+        <div class="container-fluid py-5" style="background-color: #F0F0F0;" id="cfluid1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h1><a style="color: #BDD5B1;" id="my">My</a> Gallery.</h1>
+                        <p>My Random Gallery Colection Est.2023</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 offset-2" id="col">
+                        <img src="~/css/Assets/img/img2.jpg" class="img-fluid" alt="" id="img4">
+                        <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis fuga cum exercitationem dolores veniam nostrum pariatur, fugit totam placeat quo facilis magnam obcaecati ipsam voluptatum dicta? Maxime dolor esse ipsum?</p> -->
+                    </div>
+                    <div class="col-4">
+                        <div class="row">
+                            <img src="~/css/Assets/img/img3.jpg" alt="" id="img3">
+                            <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate exercitationem, praesentium facere repellendus corrupti rem maxime rerum voluptates fugit ipsum pariatur dolores explicabo repudiandae facilis, dignissimos dicta ipsa, doloribus mollitia?</p> -->
+                        </div>
+                        <div class="row my-1">
+                            <img src="~/css/Assets/img/img4.jpg" class="img-fluid" alt="" id="img3">
+                            <!-- <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam, aut? Dolorum voluptates ex ducimus nihil voluptas reprehenderit quos earum quidem ipsa corrupti consectetur, accusamus sapiente, minima maxime. Nemo, labore blanditiis!</p> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid py-5" style="background-color: #F7F7F7;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h1 id="hit">Hit <a style="color: #BDD5B1;">Me.</a></h1>
+                        <p id="pBtn">Button AddEventListener.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 offset-3">
+                        <button style="border-radius: 30px;" id="btn1">Button</button>
+                    </div>
+                    <div class="col-2 ">
+                        <button style="border-radius: 30px;" id="btn2">Button</button>
+                    </div>
+                    <div class="col-2 ">
+                        <button style="border-radius: 30px;" id="btn3">Button</button>
+                    </div>
+                </div>
+                <script src="btn.js"></script>
+            </div>
+        </div>*@
+        @*<div class="container-fluid py-4" style="background-color:#BDD5B1;">
+            <div class="col-10 offset-1">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h1><a style="color: white;">My</a> Table.</h1>
+                        <p>This Is Table Pokemon </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <table id="tabel1" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Guid</th>
+                                    <th>nik</th>
+                                    <th>firstname</th>
+                                    <th>lastname</th>
+                                    <th>birthdate</th>
+                                    <th>gender</th>
+                                    <th>hiringdate</th>
+                                    <th>email</th>
+                                    <th>phonenumber</th> 
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wrapper-sw">
+                            </tbody>
+                        </table>
+                        <div class="col-2 offset-6">
+                            <div class="row py-4" style="align-content:center">
+                            <button type="button" class="button2" data-bs-toggle="modal" data-bs-target="#employeeModal" onclick="openAddEmpModal()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    </div>
+    <!-- Modal Detail -->
+    @*<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable"> 
+            <div class="modal-content" style="padding: 10px;
+                     margin: 10px 10px 10px 10px;
+                     width: 600px;
+                     height:800px;
+                     border-radius: 30px;
+                     background:#F0F0F0;
+                     align-content:center">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pokemon Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div  style="width: 30rem;" id="container">
+                                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-indicators">
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                        </div>
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item" >
+                                                <img id="pokemonFront" src="" alt="" class="d-block w-100">                                                
+                                            </div>
+                                            <div class="carousel-item active">
+                                                <img id="imgPoke" src="" alt="" class="d-block w-100">
+                                            </div>
+                                            <div class="carousel-item" >
+                                                <img id="pokemonBack" src="" alt="" class="d-block w-100">
+                                            </div>
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="card-body">
+                                        <h2 class="card-title" style="color:white;" id="modal-title"></h2>
+                                        <div class="col" id="rowBadge"></div>
+                                        <p class="card-text" id="description"></p>
+                                    </div>
+                                    <ul class="list-group list-group-flush" >
+                                        <li class="list-group-item">Height : <a id="height"></a></li>
+                                        <li class="list-group-item">Weight : <a id="weight"></a> </li>
+                                        <li class="list-group-item">Base Experience : <a id="baseExperience"></a></li>
+                                    </ul>
+                                    <div class="row py-3">
+                                        <div class="progress">
+                                            <div id="hp" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100">HP</div>
+                                        </div><br />
+                                        <div class="progress">
+                                            <div id="attack" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100">Weight</div>
+                                        </div><br />
+                                        <div class="progress">
+                                            <div id="bExperience" class="progress-bar bg-success" role="progressbar" aria-valuemin="0" aria-valuemax="100">Base Experience</div>
+                                        </div><br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="modal-footer">
+                    <button type="button" class="button3" style="border-radius: 30px;" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="button2" style="border-radius: 30px;">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+    <!-- Modal Form -->
+    @*<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content" style="padding: 10px;
+                     margin: 10px 10px 10px 10px;
+                     width: 600px;
+                     height:800px;
+                     border-radius: 30px;
+                     background:#F0F0F0;
+                     align-content:center">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeModalLabel">Add Employee</h5>
+                </div>
+                <div class="modal-body" id="y">
+                    <div class="container-fluid">
+                        <form class="row needs-validation" novalidate>
+                            <div class="col-md-12">
+                                <label class="form-label">NIK: </label>
+                                <input type="text" class="form-control" id="employee-nik" name="employee-nik" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Nik.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">First Name: </label>
+                                <input type="text" class="form-control" id="employee-fname" name="employee-fname" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please input your first name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name: </label>
+                                <input type="text" class="form-control" id="employee-lname" name="employee-lname" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please input your last name.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Birthdate: </label>
+                                <input type="date" class="form-control" id="employee-bdate" name="employee-bdate" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Birthdate.
+                                </div>
+                            </div>
+                            <div class="col-md-12" required>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="employee-gender" id="employee-gender-l">
+                                    <label class="form-check-label" for="employee-gender-l">
+                                        Laki-laki
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="employee-gender" id="employee-gender-p">
+                                    <label class="form-check-label" for="employee-gender-p">
+                                        Perempuan
+                                    </label>
+                                </div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must choose gender.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Hiring date: </label>
+                                <input type="date" class="form-control" id="employee-hdate" name="employee-hdate" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input hiring date.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Email: </label>
+                                <input type="email" class="form-control" id="employee-email" name="employee-email" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input email.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Phone number: </label>
+                                <input type="number" class="form-control" id="employee-pnumber" name="employee-pnumber" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must Phone Number.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Department ID: </label>
+                                <select class="form-select" aria-label="Default select example" required>
+                                    <option>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must choose Departement ID.
+                                </div>
+                            </div>
+                            <div class="col-12 py-3">
+                                <button class="button2" style="border-radius:30px;" type="submit">Submit form</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+    @*<!-- Modal Employee Input -->
+    <div class="modal fade" id="employeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content" style="padding: 10px;
+                     margin: 10px 10px 10px 10px;
+                     width: 600px;
+                     height:800px;
+                     border-radius: 30px;
+                     background:#F0F0F0;
+                     align-content:center">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeModalLabel">Add Employee</h5>
+                </div>
+                <div class="modal-body" id="employeeModalBody">
+                    <div class="container-fluid">
+                        <form class="row needs-validation" onsubmit="AddEmployee()">
+                            <div class="col-md-12">
+                                <label for="employee-nik" class="form-label">Nik</label>
+                                <input type="text" class="form-control" id="employee-nik" name="employee-nik" maxlength="6" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Nik.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-fname" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="employee-fname" name="employee-fname" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input First Name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-lname" class="form-label">last Name</label>
+                                <input type="text" class="form-control" id="employee-lname" name="employee-lname" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Last name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-bdate" class="form-label">Birth Date </label>
+                                <input type="date" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="form-control" id="employee-bdate" name="employee-bdate" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input birthdate.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="employee-gender" id="employee-gender-m" required>
+                                    <label class="form-check-label" for="employee-gender-m">
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="employee-gender" id="employee-gender-f" required>
+                                    <label class="form-check-label" for="employee-gender-f">
+                                        Female
+                                    </label>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please choose your Gender.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-hdate" class="form-label">Hiring Date</label>
+                                <input type="date" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="form-control" id="employee-hdate" name="employee-hdate" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must hiring Date.
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="employee-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="employee-email" name="employee-email" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input email.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="employee-pnumber" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="employee-pnumber" name="employee-pnumber" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Phone Number.
+                                </div>
+                            </div>
+                            <div class="col-12 py-4">
+                            <button type="button" class="button3" style="border-radius: 30px;" data-bs-dismiss="modal">Close</button>
+                            <button class="button2" style="border-radius:30px;" type="submit">Submit</button>
+                            </div> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Employee Update -->
+    <div class="modal fade" id="employeeModalUpdate" tabindex="-1" role="dialog" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content" style="padding: 10px;
+                     margin: 10px 10px 10px 10px;
+                     width: 600px;
+                     height:800px;
+                     border-radius: 30px;
+                     background:#F0F0F0;
+                     align-content:center">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeModalLabelUpdate">Update Employee</h5>
+                </div>
+                <div class="modal-body" id="employeeModalBodyUpdate">
+                    <div class="container-fluid">
+                        <form class="row needs-validation" onsubmit="updateEmployee()">
+                            <div class="col-md-12">
+                                <label for="employee-nik" class="form-label">Nik</label>
+                                <input type="text" class="form-control" id="emp-nik" name="emp-nik" maxlength="6" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Nik.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-fname" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="emp-fname" name="emp-fname" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input First Name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-lname" class="form-label">last Name</label>
+                                <input type="text" class="form-control" id="emp-lname" name="emp-lname" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Last name.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-bdate" class="form-label">Birth Date </label>
+                                <input type="date" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="form-control" id="emp-bdate" name="emp-bdate" required />
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input birthdate.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Gender</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emp-gender" id="emp-gender-m" required>
+                                    <label class="form-check-label" for="employee-gender-m">
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="emp-gender" id="emp-gender-f" required>
+                                    <label class="form-check-label" for="employee-gender-f">
+                                        Female
+                                    </label>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Please choose your Gender.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="employee-hdate" class="form-label">Hiring Date</label>
+                                <input type="date" pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD" class="form-control" id="emp-hdate" name="emp-hdate" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must hiring Date.
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="employee-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="emp-email" name="emp-email" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input email.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="employee-pnumber" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="emp-pnumber" name="emp-pnumber" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    You must input Phone Number.
+                                </div>
+                            </div>
+                            <div class="col-12 py-4">
+                                <button type="button" class="button3" style="border-radius: 30px;" data-bs-dismiss="modal">Close</button>
+                                <button class="button2" style="border-radius:30px;" type="submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/JvScrpt.js" asp-append-version="true"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+            crossorigin="anonymous"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

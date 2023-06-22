@@ -1,4 +1,5 @@
-﻿using WEBAPI.Models;
+﻿using System.Security.Principal;
+using WEBAPI.Models;
 
 namespace WEBAPI.ViewModels.Universities
 {
@@ -7,6 +8,8 @@ namespace WEBAPI.ViewModels.Universities
         public Guid? Guid { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         /*public static UniversityVM ToVM(University university)
         {

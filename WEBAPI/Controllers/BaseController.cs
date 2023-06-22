@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WEBAPI.Contracts;
@@ -10,7 +11,7 @@ namespace WEBAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    /*[Authorize]*/
+    /* [Authorize]*/
     public class BaseController<TModel, TViewModel> : ControllerBase
     {
         private readonly IRepositoryGeneric<TModel> _repository;

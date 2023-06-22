@@ -11,6 +11,8 @@ namespace WEBAPI.ViewModels.Educations
         [Range(0,4, ErrorMessage = "Input a Valid number")]
         public float Gpa { get; set; }
         public Guid UniversityGuid { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         public static EducationVM ToVM(Education education)
         {

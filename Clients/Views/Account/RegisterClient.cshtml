@@ -1,0 +1,244 @@
+﻿@model Clients.ViewModels.Others.RegisterVM
+
+@{
+    ViewData["Title"] = "RegisterClient";
+}
+
+@*<h1>RegisterClient</h1>
+
+<h4>RegisterVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="RegisterClient" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BirthDate" class="control-label"></label>
+                <input asp-for="BirthDate" class="form-control" />
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HiringDate" class="control-label"></label>
+                <input asp-for="HiringDate" class="form-control" />
+                <span asp-validation-for="HiringDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Major" class="control-label"></label>
+                <input asp-for="Major" class="form-control" />
+                <span asp-validation-for="Major" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Degree" class="control-label"></label>
+                <input asp-for="Degree" class="form-control" />
+                <span asp-validation-for="Degree" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GPA" class="control-label"></label>
+                <input asp-for="GPA" class="form-control" />
+                <span asp-validation-for="GPA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UniversityCode" class="control-label"></label>
+                <input asp-for="UniversityCode" class="form-control" />
+                <span asp-validation-for="UniversityCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UniversityName" class="control-label"></label>
+                <input asp-for="UniversityName" class="form-control" />
+                <span asp-validation-for="UniversityName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Register</title>
+
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2-min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gradient-primary">
+    <div class="container-fluid py-5">
+        <div class="container" style="font-family:sans-serif;">
+
+            <!-- Outer Row -->
+            <div class="row justify-content-center">
+
+                <div class="col-xl-10 col-lg-12 col-md-9">
+
+                    <div class="card o-hidden border-0 shadow-lg my-5">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
+                            <div class="row">
+                                <div class="col-lg-6 d-none d-lg-block">
+                                    <img src="~/css/Assets/img/img2.jpg" style="width:550px; height:1400px;"  alt="" />
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="p-5">
+                                        @*<div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4" style="font-weight:500;">Welcome Back!</h1>
+                                        </div>*@
+                                        <div class="col-12 text-center">
+                                            <h1><a style="color: #BDD5B1;" id="my">Welcome</a> Back!</h1>
+                                        </div>
+                                        <br />
+                                        <form action="RegisterClient" method="post">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <div class="form-group">
+                                                <label asp-for="FirstName" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="FirstName" class="form-control" placeholder="First Name.." style="border-radius:30px;" />
+                                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="LastName" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="LastName" class="form-control" placeholder="Last Name.." style="border-radius:30px;" />
+                                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="BirthDate" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="BirthDate" class="form-control" style="border-radius:30px;" />
+                                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="Gender" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="Gender" class="form-control" placeholder="Gender.." style="border-radius:30px;" />
+                                                <span asp-validation-for="Gender" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="HiringDate" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="HiringDate" class="form-control"  style="border-radius:30px;" />
+                                                <span asp-validation-for="HiringDate" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="Email" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="Email" class="form-control" placeholder="Email.." style="border-radius:30px;" />
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="PhoneNumber" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number.." style="border-radius:30px;" />
+                                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="Major" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="Major" class="form-control" placeholder="Major.." style="border-radius:30px;" />
+                                                <span asp-validation-for="Major" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="Degree" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="Degree" class="form-control" placeholder="Degree.." style="border-radius:30px;" />
+                                                <span asp-validation-for="Degree" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="GPA" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="GPA" class="form-control" placeholder="Gpa.." style="border-radius:30px;" />
+                                                <span asp-validation-for="GPA" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="UniversityCode" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="UniversityCode" class="form-control" placeholder="University code.." style="border-radius:30px;" />
+                                                <span asp-validation-for="UniversityCode" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="UniversityName" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="UniversityName" class="form-control" placeholder="University name.." style="border-radius:30px;" />
+                                                <span asp-validation-for="UniversityName" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="Password" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="Password" class="form-control" placeholder="Password..." style="border-radius:30px;" />
+                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group py-2">
+                                                <label asp-for="ConfirmPassword" class="control-label" style="color: #BDD5B1;"></label>
+                                                <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password..." style="border-radius:30px;" />
+                                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                            </div>
+                                            <br />
+                                            <div class="form-group">
+                                                <input type="submit" value="Register" class="button2" />
+                                            </div>
+                                        </form>
+
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2-min.js"></script>
+
+</body>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
